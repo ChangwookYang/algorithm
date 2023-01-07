@@ -2,24 +2,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    /**
-     * 총 정점수 n, 간선 수 m
-     * m개 만큼의 간선의 수가 주어짐
-     * 1부터 n번까지 가는 경우의 수를 구하여라
-     * */
-/*
-5 9
-1 2
-1 3
-1 4
-2 1
-2 3
-2 5
-3 4
-4 2
-4 5
-result : 6
-*/
+
     static int[][] graph;
     static int[] check;
     static int answer;
