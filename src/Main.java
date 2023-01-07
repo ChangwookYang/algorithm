@@ -1,61 +1,60 @@
-import java.util.LinkedList;
-import java.util.Queue;
-
-class Node {
-    int data;
-    Node lt, rt;
-
-    public Node(int val) {
-        data = val;
-        lt = rt = null;
-    }
-}
+import java.util.Scanner;
 
 public class Main {
-    Node root;
 
-    public static int DFS(int L, Node root) {
-        if (root.lt == null && root.rt == null) {
-            return L;
-        } else
-            return Math.min(DFS(L+1, root.lt), DFS(L+1, root.rt));
+    /**
+     * 총 정점수 n, 간선 수 m
+     * m개 만큼의 간선의 수가 주어짐
+     * 1부터 n번까지 가는 경우의 수를 구하여라
+     * */
+/*
+5 9
+1 2
+1 3
+1 4
+2 1
+2 3
+2 5
+3 4
+4 2
+4 5
+result : 6
+*/
+    static int[][] graph;
+    static int[] check;
+    static int answer;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+        graph = new int[n + 1][n + 1];
+        check = new int[n + 1];
+
+        answer = 0;
+        check[1] = 1;
+        for (int i = 0; i < m; i++) {
+            int a = scanner.nextInt();
+            int b = scanner.nextInt();
+            graph[a][b] = 1;
+        }
+
+        DFS(1, n);
+        System.out.println(answer);
     }
 
-    public static int BFS(Node root) {
-        int L = 0;
-        Queue<Node> queue = new LinkedList<>();
-        queue.offer(root);
-
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-
-            for (int i = 0; i < size; i++) {
-                Node node = queue.poll();
-                if (node.lt == null && node.rt == null) {
-                    return L;
-                } else {
-                    if(node.lt != null)
-                        queue.offer(node.lt);
-                    if(node.rt != null)
-                        queue.offer(node.rt);
+    private static void DFS(int node, int lastNode) {
+        if (node == lastNode) {
+            answer++;
+        } else {
+            for (int i = 1; i <= lastNode; i++) {
+                if (graph[node][i] == 1 && check[i] == 0) {
+                    check[node] = 1;
+                    DFS(i, lastNode);
+                    check[node] = 0;
                 }
             }
-            L++;
         }
-        return -1;
-    }
 
-    public static void main(String[] args) {
-        Main tree = new Main();
-        tree.root = new Node(1);
-        tree.root.lt = new Node(2);
-        tree.root.rt = new Node(3);
-        tree.root.lt.lt = new Node(4);
-        tree.root.lt.rt = new Node(5);
-        int result = DFS(0, tree.root);
-        int result2 = BFS(tree.root);
-        System.out.println(result);
-        System.out.println(result2);
     }
 
 }
