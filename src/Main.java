@@ -14,19 +14,19 @@ public class Main {
 
         arr[1][1] = 1;
 
-        combination(n, r);
+        int combination = combination(n, r);
+        System.out.println(combination);
 
     }
 
-    private static int combination(int n, int r) {
-        if (n == 1 && r == 1) return 1;
-        else if (r == 1) return n;
+    private static int combination(int current, int r) {
+        if (current == r || r == 0) return 1;
 
-        if (arr[n][r] > 0) {
-            return arr[n][r];
+        if (arr[current][r] > 0) {
+            return arr[current][r];
         } else {
-            int value = combination(n - 1, r - 1) + combination(n - 1, r);
-            arr[n][r] = value;
+            int value = combination(current - 1, r - 1) + combination(current - 1, r);
+            arr[current][r] = value;
             return value;
         }
     }
