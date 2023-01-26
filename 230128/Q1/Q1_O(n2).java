@@ -2,18 +2,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-class Person implements Comparable<Person> {
+class Person {
     int height;
     int weight;
 
     public Person(int height, int weight) {
         this.height = height;
         this.weight = weight;
-    }
-
-    @Override
-    public int compareTo(Person person) {
-        return person.height - this.height;
     }
 }
 
@@ -31,15 +26,16 @@ public class Main {
             list.add(new Person(height, weight));
         }
 
-        list.sort(Person::compareTo);
-
         int cnt = 0;
-        int maxWeight = list.get(0).weight;
         for (Person target : list) {
-            if (maxWeight <= target.weight) {
-                maxWeight = target.weight;
-                cnt++;
+            boolean isEnough = true;
+            for (Person other : list) {
+                if (target.height < other.height && target.weight < other.weight) {
+                    isEnough = false;
+                    break;
+                }
             }
+            if (isEnough) cnt++;
         }
 
         System.out.println(cnt);
