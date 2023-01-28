@@ -4,7 +4,7 @@ import java.util.Scanner;
 class Time implements Comparable<Time> {
     int time;
     char state;
-    
+
     public Time(int time, char state) {
         this.time = time;
         this.state = state;
