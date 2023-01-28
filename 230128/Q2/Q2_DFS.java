@@ -12,18 +12,21 @@ class Meeting implements Comparable<Meeting> {
 
     @Override
     public int compareTo(Meeting meeting) {
-        if (this.end == meeting.end) return this.start - meeting.start;
-        else return this.end - meeting.end;
+        return this.start - meeting.start;
     }
 }
 
 public class Main {
 
+    static ArrayList<Meeting> list = new ArrayList<>();
+    static int n;
+    static int totalCnt;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
+        n = scanner.nextInt();
 
-        ArrayList<Meeting> list = new ArrayList<>();
+        list.add(new Meeting(0, 0));
         for (int i = 0; i < n; i++) {
             int start = scanner.nextInt();
             int end = scanner.nextInt();
@@ -32,15 +35,18 @@ public class Main {
 
         list.sort(Meeting::compareTo);
 
-        int cnt = 0;
-        int endTime = 0;
-        for (Meeting meeting : list) {
-            if (meeting.start >= endTime) {
-                cnt++;
-                endTime = meeting.end;
+        DFS(0, 0, 0, 0, 0);
+
+        System.out.println(totalCnt);
+    }
+
+    static void DFS(int index, int cnt, int lastEnd, int start, int end) {
+        if (lastEnd > start) {
+            if(cnt > totalCnt) totalCnt = cnt;
+        } else {
+            for (int i = index + 1; i <= n; i++) {
+                DFS(i, cnt + 1, end, list.get(i).start, list.get(i).end);
             }
         }
-
-        System.out.println(cnt);
     }
 }
