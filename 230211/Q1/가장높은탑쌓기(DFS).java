@@ -39,13 +39,10 @@ public class Main {
         }
 
         Collections.sort(bricks);
-        if(n == 100) {
-            System.out.println(1483);
-        } else {
         DFS(0, 0, 0);
 
         System.out.println(maxHeight);
-    }}
+    }
 
     private static void DFS(int index, int lastWidth, int lastWeight) {
         if (index == n) {
