@@ -1,0 +1,59 @@
+Q2. 몫구하기
+https://school.programmers.co.kr/learn/courses/30/lessons/120805
+
+class Solution {
+    public int solution(int num1, int num2) {
+        return num1/num2;
+    }
+}
+
+Q3. 두수의 곱
+https://school.programmers.co.kr/learn/courses/30/lessons/120804
+
+class Solution {
+    public int solution(int num1, int num2) {
+        return num1 * num2;
+    }
+}
+
+Q4. 두수의 차
+https://school.programmers.co.kr/learn/courses/30/lessons/120803
+class Solution {
+    public int solution(int num1, int num2) {
+        return num1 - num2;
+    }
+}
+
+Q5. 나머지 구하기
+https://school.programmers.co.kr/learn/courses/30/lessons/120810
+class Solution {
+    public int solution(int num1, int num2) {
+        return num1 % num2;
+    }
+}
+
+Q6. 피자 나눠먹기
+https://school.programmers.co.kr/learn/courses/30/lessons/120816
+class Solution {
+    public int solution(int slice, int n) {
+        int answer = 1;
+        while (true) {
+            if(slice * answer >= n) break;
+            answer++;
+        }
+        return answer;
+    }
+}
+
+Q7. 배월 뒤집기
+https://school.programmers.co.kr/learn/courses/30/lessons/120821
+class Solution {
+    public int[] solution(int[] num_list) {
+        int[] answer = new int[num_list.length];
+
+        for(int i=0;i<num_list.length; i++) {
+            answer[i] = num_list[num_list.length-1-i];
+        }
+        return answer;
+    }
+}
