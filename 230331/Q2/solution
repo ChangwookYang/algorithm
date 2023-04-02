@@ -1,0 +1,100 @@
+import java.time.Duration;
+import java.time.LocalTime;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        String[] solution = solution(
+                new String[][]{{"science", "12:40", "50"}, {"music", "12:20", "40"}, {"history", "14:00", "30"}, {"computer", "12:30", "100"}});
+
+        for (String value : solution) {
+            System.out.print(value + ", ");
+        }
+    }
+
+    static class Homework implements Comparable<Homework> {
+        String name;
+        LocalTime time;
+        Integer period;
+        Integer priority;
+
+        public Homework(String name, LocalTime time, Integer period, Integer priority) {
+            this.name = name;
+            this.time = time;
+            this.period = period;
+            this.priority = priority;
+        }
+
+        @Override
+        public int compareTo(Homework homework) {
+            if (Objects.equals(this.priority, homework.priority)) return this.time.compareTo(homework.time);
+            else return homework.priority - this.priority;
+        }
+    }
+
+    public static String[] solution(String[][] plans) {
+        String[] answer = new String[plans.length];
+        List<Homework> list = new LinkedList<>();
+        List<Homework> notFinishedList = new LinkedList<>();
+        for (String[] plan : plans) {
+            list.add(new Homework(plan[0], LocalTime.parse(plan[1]), Integer.parseInt(plan[2]), Integer.MAX_VALUE));
+        }
+        Collections.sort(list);
+
+        int answerIndex = 0;
+        int priority = 1;
+        while (!list.isEmpty()) {
+            Homework currentHomework = list.get(0);
+
+            if (list.size() > 1) {
+                Homework nextHomework = list.get(1);
+                LocalTime currentEndTime = currentHomework.time.plusMinutes(currentHomework.period);
+                LocalTime nextStartTime = nextHomework.time;
+                if (Objects.equals(currentHomework.priority, nextHomework.priority) && currentEndTime.compareTo(nextStartTime) > 0) {
+                    // 다른 과제
+                    notFinishedList.add(new Homework(currentHomework.name,
+                            currentHomework.time, // 다음 시각 시작시간
+                            Duration.between(nextStartTime, currentEndTime).toMinutesPart(), priority++));
+                    list.remove(0);
+                    Collections.sort(list);
+                    Collections.sort(notFinishedList);
+                } else {
+                    // 다음과제 진행 혹은 미완성 과제
+                    Homework next = list.get(0);
+
+                    Homework nextCandidate = list.get(1);
+                    int toCandidate = Duration.between(next.time.plusMinutes(next.period), nextCandidate.time).toMinutesPart();
+                    while (!notFinishedList.isEmpty()) {
+                        if (toCandidate > 0) {
+                            Homework notFinished = notFinishedList.get(0);
+                            if (notFinished.period <= toCandidate) {
+                                toCandidate = toCandidate - notFinished.period;
+
+                                Homework remove = notFinishedList.remove(0);
+                                answer[answerIndex++] = remove.name;
+                            } else {
+                                notFinished.period = notFinished.period - toCandidate;
+                                break;
+                            }
+                        } else break;
+                    }
+                    // nextCandidate.time (next.time.plusMinutes(next.period));
+
+                    Homework remove = list.remove(0);
+                    answer[answerIndex++] = remove.name;
+                }
+            } else {
+                Homework remove = list.remove(0);
+                answer[answerIndex++] = remove.name;
+            }
+        }
+
+        while (!notFinishedList.isEmpty()) {
+            Homework remove = notFinishedList.remove(0);
+            answer[answerIndex++] = remove.name;
+        }
+
+        return answer;
+    }
+}
