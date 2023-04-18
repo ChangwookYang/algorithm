@@ -1,100 +1,55 @@
 public class Main {
 
-    public static void main(String[] args) {
-//        int[] solution = solution(new String[]{"SOO","OXX","OOO"}, new String[] {"E 2","S 2","W 1"});
-//        int[] solution = solution(new String[]{"SOO","OOO","OOO"}, new String[] {"E 2","S 2","W 1"});
-        int[] solution = solution(new String[]{"OSO","OOO","OXO","OOO"}, new String[] {"E 2","S 3","W 1"});
-
-        for (int value : solution) {
-            System.out.print(value + ", ");
+    public static ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode answerList = new ListNode();
+        ListNode dummy = answerList;
+        while(list1 !=null && list2 != null) {
+            if(list1.val > list2.val) {
+                answerList.next = list2;
+                list2 = list2.next;
+            } else {
+                answerList.next = list1;
+                list1 = list1.next;
+            }
+            answerList = answerList.next;
         }
+
+        while(list1 != null) {
+            answerList.next = list1;
+            list1 = list1.next;
+        }
+
+
+        while(list2 != null) {
+            answerList.next = list2;
+            list2 = list2.next;
+        }
+
+        return dummy.next;
     }
 
-    public static int[] solution(String[] park, String[] routes) {
-        int[] answer = new int[2];
-        int parkSizeX = park.length;
-        int parkSizeY = park[0].length();
 
-        char[][] arrayPark = new char[parkSizeX][parkSizeY];
+    public static void main(String[] args) {
+        ListNode list1 = new ListNode(-9, new ListNode(3));
+        ListNode list2 = new ListNode(5, new ListNode(7));
+        mergeTwoLists(list1, list2);
+    }
 
-        int curX = 0, curY = 0;
-        for (int i = 0; i < parkSizeX; i++) {
-            for (int j = 0; j < parkSizeY; j++) {
-                arrayPark[i][j] = park[i].charAt(j);
-                if(arrayPark[i][j] == 'S') {
-                    curX = i;
-                    curY = j;
-                }
-            }
+
+    private static class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode() {
         }
 
-        for (String route : routes) {
-            char dir = route.split(" ")[0].charAt(0);
-            int move = Integer.parseInt(route.split(" ")[1]);
-
-            boolean isExistX = false;
-            switch (dir) {
-                case 'N':
-                    if(curX - move < 0) continue;
-                    else {
-                        for (int i = curX - 1; i >= curX - move; i--) {
-                            if (arrayPark[i][curY] == 'X') {
-                                isExistX = true;
-                                break;
-                            }
-                        }
-                        if (!isExistX) {
-                            curX = curX - move;
-                        }
-                    }
-                    break;
-                case 'S':
-                    if(curX + move >= parkSizeX) continue;
-                    else {
-                        for (int i = curX + 1; i <= curX + move; i++) {
-                            if (arrayPark[i][curY] == 'X') {
-                                isExistX = true;
-                                break;
-                            }
-                        }
-                        if (!isExistX) {
-                            curX = curX + move;
-                        }
-                    }
-                    break;
-                case 'W':
-                    if(curY - move < 0) continue;
-                    else {
-                        for (int i = curY - 1; i >= curY - move; i--) {
-                            if (arrayPark[curX][i] == 'X') {
-                                isExistX = true;
-                                break;
-                            }
-                        }
-                        if (!isExistX) {
-                            curY = curY - move;
-                        }
-                    }
-                    break;
-                case 'E':
-                    if(curY + move >= parkSizeY) continue;
-                    else {
-                        for (int i = curY + 1; i <= curY + move; i++) {
-                            if (arrayPark[curX][i] == 'X') {
-                                isExistX = true;
-                                break;
-                            }
-                        }
-                        if (!isExistX) {
-                            curY = curY + move;
-                        }
-                    }
-            }
+        ListNode(int val) {
+            this.val = val;
         }
 
-        answer[0] = curX;
-        answer[1] = curY;
-
-        return answer;
+        ListNode(int val, ListNode next) {
+            this.val = val;
+            this.next = next;
+        }
     }
 }
