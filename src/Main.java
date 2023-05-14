@@ -1,55 +1,49 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
 
-    public static ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-        ListNode answerList = new ListNode();
-        ListNode dummy = answerList;
-        while(list1 !=null && list2 != null) {
-            if(list1.val > list2.val) {
-                answerList.next = list2;
-                list2 = list2.next;
-            } else {
-                answerList.next = list1;
-                list1 = list1.next;
-            }
-            answerList = answerList.next;
-        }
-
-        while(list1 != null) {
-            answerList.next = list1;
-            list1 = list1.next;
-        }
-
-
-        while(list2 != null) {
-            answerList.next = list2;
-            list2 = list2.next;
-        }
-
-        return dummy.next;
-    }
-
-
     public static void main(String[] args) {
-        ListNode list1 = new ListNode(-9, new ListNode(3));
-        ListNode list2 = new ListNode(5, new ListNode(7));
-        mergeTwoLists(list1, list2);
+        List<List<Integer>> lists = combinationSum(new int[]{2, 3, 6, 7}, 7);
+
+        for (List<Integer> list : lists) {
+            String answer = "";
+            for (Integer integer : list) {
+                answer += integer + ",";
+            }
+            System.out.println(answer);
+        }
     }
 
+    public static List<List<Integer>> lists = new ArrayList<>();
 
-    private static class ListNode {
-        int val;
-        ListNode next;
+    // dfs
+    public static List<List<Integer>> combinationSum(int[] candidates, int target) {
 
-        ListNode() {
+        for (int i = 0; i < candidates.length; i++) {
+            List<Integer> list = new ArrayList<>();
+            list.add(candidates[i]);
+
+            next(candidates, list, i, target - candidates[i]);
         }
 
-        ListNode(int val) {
-            this.val = val;
-        }
+        return lists;
+    }
 
-        ListNode(int val, ListNode next) {
-            this.val = val;
-            this.next = next;
+    private static void next(int[] candidates, List<Integer> answer, int index, int target) {
+        if (target == 0) {
+            List<Integer> list = new ArrayList<>(answer);
+            lists.add(list);
+        } else if (target > 0) {
+            int answerIndex = answer.size();
+            for (int i = index; i < candidates.length; i++) {
+                int temp = target - candidates[i];
+                if (temp >= 0) {
+                    answer.add(answerIndex, candidates[i]);
+                    next(candidates, answer, i, target - candidates[i]);
+                    answer.remove(answerIndex);
+                }
+            }
         }
     }
 }
