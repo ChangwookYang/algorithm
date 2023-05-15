@@ -1,49 +1,50 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
 
     public static void main(String[] args) {
-        List<List<Integer>> lists = combinationSum(new int[]{2, 3, 6, 7}, 7);
+//        ListNode head = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5)))));
 
-        for (List<Integer> list : lists) {
-            String answer = "";
-            for (Integer integer : list) {
-                answer += integer + ",";
-            }
-            System.out.println(answer);
-        }
+        ListNode head = new ListNode(1);
+        removeNthFromEnd(head, 1);
     }
 
-    public static List<List<Integer>> lists = new ArrayList<>();
+    public static ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode temp = new ListNode(head.val, head.next);
 
-    // dfs
-    public static List<List<Integer>> combinationSum(int[] candidates, int target) {
-
-        for (int i = 0; i < candidates.length; i++) {
-            List<Integer> list = new ArrayList<>();
-            list.add(candidates[i]);
-
-            next(candidates, list, i, target - candidates[i]);
+        int size = 1;
+        while (temp.next != null) {
+            size += 1;
+            temp = temp.next;
         }
 
-        return lists;
+        int removeNumber = size - n;
+        ListNode answer = new ListNode();
+        ListNode returnNode = answer;
+        for (int i = 0; i < size; i++) {
+            if (i != removeNumber) {
+                answer.next = new ListNode(head.val);
+                answer = answer.next;
+            }
+            head = head.next;
+        }
+
+        return returnNode.next;
     }
 
-    private static void next(int[] candidates, List<Integer> answer, int index, int target) {
-        if (target == 0) {
-            List<Integer> list = new ArrayList<>(answer);
-            lists.add(list);
-        } else if (target > 0) {
-            int answerIndex = answer.size();
-            for (int i = index; i < candidates.length; i++) {
-                int temp = target - candidates[i];
-                if (temp >= 0) {
-                    answer.add(answerIndex, candidates[i]);
-                    next(candidates, answer, i, target - candidates[i]);
-                    answer.remove(answerIndex);
-                }
-            }
+    private static class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode() {
         }
+
+        ListNode(int val) {
+            this.val = val;
+        }
+
+        ListNode(int val, ListNode next) {
+            this.val = val;
+            this.next = next;
+        }
+
     }
 }
