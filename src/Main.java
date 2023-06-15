@@ -1,50 +1,64 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Main {
 
+    static int[] plus = new int[]{-1, 0, 1};
+
     public static void main(String[] args) {
-//        ListNode head = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5)))));
-
-        ListNode head = new ListNode(1);
-        removeNthFromEnd(head, 1);
+        int result = maxLevelSum(new TreeNode(1));
     }
 
-    public static ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode temp = new ListNode(head.val, head.next);
+    public static int maxLevelSum(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int level = 1;
+        int max = Integer.MIN_VALUE;
+        int maxLevel = 0;
+        while (!queue.isEmpty()) {
+            int length = queue.size();
+            int sum = 0;
+            for (int i = 0; i < length; i++) {
+                TreeNode node = queue.poll();
+                if (node != null) {
+                    sum += node.val;
+                    if (node.left != null) {
+                        queue.offer(node.left);
+                    }
 
-        int size = 1;
-        while (temp.next != null) {
-            size += 1;
-            temp = temp.next;
-        }
-
-        int removeNumber = size - n;
-        ListNode answer = new ListNode();
-        ListNode returnNode = answer;
-        for (int i = 0; i < size; i++) {
-            if (i != removeNumber) {
-                answer.next = new ListNode(head.val);
-                answer = answer.next;
+                    if (node.right != null) {
+                        queue.offer(node.right);
+                    }
+                }
             }
-            head = head.next;
+            if (sum > max) {
+                max = sum;
+                maxLevel = level;
+            }
+            level++;
         }
 
-        return returnNode.next;
+        return maxLevel;
     }
 
-    private static class ListNode {
+    public static class TreeNode {
         int val;
-        ListNode next;
+        TreeNode left;
+        TreeNode right;
 
-        ListNode() {
+        TreeNode() {
         }
 
-        ListNode(int val) {
+        TreeNode(int val) {
             this.val = val;
         }
 
-        ListNode(int val, ListNode next) {
+        TreeNode(int val, TreeNode left, TreeNode right) {
             this.val = val;
-            this.next = next;
+            this.left = left;
+            this.right = right;
         }
-
     }
 }
+
+
